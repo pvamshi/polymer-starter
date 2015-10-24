@@ -21,30 +21,34 @@
       paper-item {
         float: right;
       }
+      svg {
+        border: 1px dashed gray;
+      }
     </style>
 
-    <paper-material class="properties center">
+    <!-- <paper&#45;material class="properties center"> -->
+    <!--  -->
+    <!--   <paper&#45;item> -->
+    <!--     Radius: -->
+    <!--     <paper&#45;slider min="10" max="200" value="{{radius}}" editable></paper&#45;slider> -->
+    <!--   </paper&#45;item> -->
+    <!--   <paper&#45;item> -->
+    <!--     X pos -->
+    <!--     <paper&#45;slider min="10" max="200" value="{{posx}}" editable></paper&#45;slider> -->
+    <!--   </paper&#45;item> -->
+    <!--   <paper&#45;item> -->
+    <!--     Y pos -->
+    <!--     <paper&#45;slider min="10" max="200" value="{{posy}}" editable></paper&#45;slider> -->
+    <!--   </paper&#45;item> -->
+    <!-- </paper&#45;material> -->
 
-      <paper-item>
-        Radius:
-        <paper-slider min="10" max="200" value="{{radius}}" editable></paper-slider>
-      </paper-item>
-      <paper-item>
-        X pos
-        <paper-slider min="10" max="200" value="{{posx}}" editable></paper-slider>
-      </paper-item>
-      <paper-item>
-        Y pos
-        <paper-slider min="10" max="200" value="{{posy}}" editable></paper-slider>
-      </paper-item>
-    </paper-material>
-
-    <svg width="900" height="800">
+    <svg width="1000" height="900" on-click="clickEve" on-mousedown="mouseDownEve" on-mouseup="upEve"
+    on-mousemove="mouseMoveEve">
     </svg>
 
     <!-- <graph&#45;circle radius="{{radius}}"></graph&#45;circle> -->
     <content></content>
-
+    <a>{{posx}} , {{posy}}, {{radius}} {{circles[0].radius}}</a>
 
     <paper-fab icon="add" class="blue" title="add" on-click="addCircle">circle</paper-fab>
   </template>
@@ -57,7 +61,7 @@
       Polymer(
       {
         is: 'graph-board',
-
+        drawCircle: false,
         properties:
         {
           radius:
@@ -102,20 +106,88 @@
             this.circles[0].radius = rad;
           }
         },
-        changePosx: function(posx) {
-          
+        changePosx: function(posx)
+        {
+
           if (this.circles && this.circles.length > 0)
           {
             this.circles[0].posx = posx;
           }
         },
-        changePosy: function(posy) {
-        
+        changePosy: function(posy)
+        {
+
           if (this.circles && this.circles.length > 0)
           {
             this.circles[0].posy = posy;
           }
         },
+        clickEve: function(e)
+        {
+          console.log('clicked');
+          if (this.circles && this.circles.length > 0)
+          {
+            this.circles[0].radius = 0;
+
+          }
+        },
+        mouseDownEve: function(e, f)
+        {
+          console.log('dragged');
+          e.target.style.cursor = "crosshair";
+          this.posx = parseInt(e.layerX - this.offsetLeft);
+          this.posy = parseInt(e.layerY - this.offsetTop);
+          this.offsetLeftInit = this.offsetLeft;
+          this.offsetTopInit= this.offsetTop;
+          // this.posx = e.target.offsetX;
+          // this.posy = e.target.offsetY;
+          this.drawCircle = true;
+          if (this.circles && this.circles.length > 0)
+          {
+            this.circles[0].radius = 0;
+          }
+
+        },
+        upEve: function(e)
+        {
+          console.log(e);
+          e.target.style.cursor = "default";
+          this.drawCircle = false;
+        },
+        mouseMoveEve: function(e)
+        {
+          console.log("mouse moving");
+          console.log(this.offsetLeft);
+          console.log(this.offsetTop);
+          if (!this.drawCircle)
+          {
+            return;
+          }
+          if (!this.circles)
+          {
+            this.circles = [];
+            var graphCircle = document.createElement('graph-circle');
+            graphCircle.posx = this.posx;
+            graphCircle.posy = this.posy;
+            graphCircle.radius = 0;
+            this.radius = 0;
+            e.target.appendChild(graphCircle);
+            this.circles.push(graphCircle);
+          }
+          else
+          {
+            var x1 = e.layerX - this.offsetLeftInit;
+            var y1 = e.layerY - this.offsetTopInit;;
+            var x = x1 - this.posx;
+            var y = y1 - this.posy;
+            console.log('x1:' + x1 + ' y1:' + y1 + ' this.posx:' +
+              this.posx +
+              ' this.posy' + this.posy + ' x:' + x + ' y:' + y);
+            var rad = (Math.sqrt((x * x) + (y * y)));
+            console.log('rad' + rad);
+            this.circles[0].radius = rad;
+          }
+        }
       });
     })();
   </script>
