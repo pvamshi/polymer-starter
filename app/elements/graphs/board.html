@@ -1,0 +1,123 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="graph-board">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-fab {
+        position: absolute;
+        bottom: 50px;
+        right: 50px;
+      }
+      .properties {
+        width: 300px;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+      }
+      paper-item {
+        float: right;
+      }
+    </style>
+
+    <paper-material class="properties center">
+
+      <paper-item>
+        Radius:
+        <paper-slider min="10" max="200" value="{{radius}}" editable></paper-slider>
+      </paper-item>
+      <paper-item>
+        X pos
+        <paper-slider min="10" max="200" value="{{posx}}" editable></paper-slider>
+      </paper-item>
+      <paper-item>
+        Y pos
+        <paper-slider min="10" max="200" value="{{posy}}" editable></paper-slider>
+      </paper-item>
+    </paper-material>
+
+    <svg width="900" height="800">
+    </svg>
+
+    <!-- <graph&#45;circle radius="{{radius}}"></graph&#45;circle> -->
+    <content></content>
+
+
+    <paper-fab icon="add" class="blue" title="add" on-click="addCircle">circle</paper-fab>
+  </template>
+
+  <script>
+    (function()
+    {
+      'use strict';
+
+      Polymer(
+      {
+        is: 'graph-board',
+
+        properties:
+        {
+          radius:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changeRad'
+          },
+          posx:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changePosx'
+          },
+          posy:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changePosy'
+          },
+        },
+        addCircle: function()
+        {
+          if (!this.circles)
+          {
+            this.circles = [];
+          }
+
+          var graphCircle = document.createElement('graph-circle');
+          // graphCircle.radius = this.radius;
+          // gccgraphCircle.setAttribute('radius', this.properties.radius.value);
+          Polymer.dom(this).appendChild(graphCircle);
+          this.circles.push(graphCircle);
+        },
+        changeRad: function(rad)
+        {
+          if (this.circles && this.circles.length > 0)
+          {
+            this.circles[0].radius = rad;
+          }
+        },
+        changePosx: function(posx) {
+          
+          if (this.circles && this.circles.length > 0)
+          {
+            this.circles[0].posx = posx;
+          }
+        },
+        changePosy: function(posy) {
+        
+          if (this.circles && this.circles.length > 0)
+          {
+            this.circles[0].posy = posy;
+          }
+        },
+      });
+    })();
+  </script>
+
+</dom-module>

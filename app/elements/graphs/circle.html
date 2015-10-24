@@ -1,0 +1,110 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="graph-circle">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <div id="circle-content"></div>
+
+  </template>
+
+  <script>
+    (function()
+    {
+      'use strict';
+
+      Polymer(
+      {
+        is: 'graph-circle',
+
+        properties:
+        {
+          radius:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changeRad'
+          },
+          posx:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changePosx'
+          },
+          posy:
+          {
+            type: Number,
+            value: '10',
+            notify: true,
+            observer: 'changePosy'
+          },
+          color:
+          {
+            type: String,
+            value: '#eeeeee',
+            notify: true,
+            observer: 'changeColor'
+          },
+        },
+        changeRad: function(e)
+        {
+          console.log('rad');
+          if (this.cir)
+          {
+            this.cir.attr('r', e);
+          }
+        },
+        changePosx: function(e)
+        {
+          console.log('rad');
+          if (this.cir)
+          {
+            this.cir.attr('cx', e);
+          }
+        },
+        changePosy: function(e)
+        {
+          console.log('rad');
+          if (this.cir)
+          {
+            this.cir.attr('cy', e);
+          }
+        },
+        changeColor: function(e)
+        {
+          console.log('rad');
+          if (this.cir)
+          {
+            this.cir.attr('fill', e);
+          }
+        },
+        attached: function()
+        {
+          console.log('attached');
+          // var parentSvg = Polymer.dom(this).node.closest('svg');
+          var sv = Polymer.dom(this).node.closest('body').querySelector(
+            'svg');
+          this.cir = d3.select(sv)
+            // .append('svg')
+            // .attr('width', 500)
+            // .attr('height', 500)
+            .append('circle');
+          // this.cir = parentSvg.append('circle')
+          this.cir.attr('cx', this.posx)
+            .attr('cy', this.posy)
+            .attr('r', this.properties.radius.value)
+            .style('fill', this.color);
+          console.log('end');
+        },
+      });
+    })();
+  </script>
+
+</dom-module>
