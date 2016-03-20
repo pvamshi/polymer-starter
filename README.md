@@ -362,4 +362,3 @@ gulp.task('vulcanize', function () {
 ## Contributing
 
 Polymer Starter Kit is a new project and is an ongoing effort by the Web Component community. We welcome your bug reports, PRs for improvements, docs and anything you think would improve the experience for other Polymer developers.
-dummy commit
